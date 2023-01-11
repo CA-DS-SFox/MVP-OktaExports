@@ -4,7 +4,7 @@ Process the daily Okta Exports
 *See R_Tidy_Transforms_Toy.R for a complete Toy example demonstrating the daily process*
 
 ## Background
-Sarah Spittle exports a daily flat csv file of advisers on the system with various detail about those advisers. Considerations are ...
+Sarah Spittle exports a daily flat csv file of advisers in Okta with various details (e.g. firstName, lastName, voluneer, etc). Processing considerations are ...
 - variable names in the export have mixed case and spaces, we want better variable names
 - okta_id is the canonical identifier for an adviser, but a small handful of advisers have multiple entries in the data as they work across multiple offices, we want to collapse into a single record.
 - Some of the details change frequently, we want to keep a history of changes.
