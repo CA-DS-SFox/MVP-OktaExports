@@ -18,7 +18,7 @@ x_current <- tribble(~okta_id,	~date_extract,	~variable,	~data,
 
 # this is the new export
 # - 00uyf9p2g4nMWrbAv0i9 : is new
-# - 00uyf9p2g4nMWrbAv0i7 : was exported yesterday, but not today, so we need to generate a "ROMOVED" record
+# - 00uyf9p2g4nMWrbAv0i7 : was exported yesterday, but not today, so we need to generate a "REMOVED" record
 # - 00uyf9p2g4nMWrbAv0i8 : Status and last name have changed since yesterday
 x_export <- tribble(~okta_id,	~date_extract,	~variable,	~data,
               "00uyf9p2g4nMWrbAv0i8",	"2023-01-08",	"username",	"fox2@lca.citizensadvice.org.uk",
