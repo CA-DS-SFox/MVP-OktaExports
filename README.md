@@ -5,7 +5,7 @@ Process the daily Okta Exports
 
 ## Background
 Sarah Spittle exports a daily flat csv file of advisers in Okta with various details (e.g. firstName, lastName, volunteer, etc). Processing considerations are ...
-- variable names in the export have mixed case and spaces, we want better variable names
+- variable names in the export have mixed case and spaces, we want better variable names.
 - okta_id is the canonical identifier for an adviser, but a small handful of advisers have multiple entries in the data because they work across multiple offices, we want to collapse these into a single record.
 - Some of the details change frequently, we want to keep a history of changes because they provide useful insights.
 - As advisers leave they are removed from Okta, we want to keep a history of past advisers for a period of time.
