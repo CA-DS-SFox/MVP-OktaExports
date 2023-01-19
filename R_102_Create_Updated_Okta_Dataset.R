@@ -38,7 +38,12 @@ df_okta_daily_exports <- tibble(oktaexports = list.files(dir_okta)) %>%
   filter(filedate > latest_date) %>% 
   identity()
 
-if (nrow(df_okta_daily_exports) == 0) stop(' ... No Exports to process')
+if (nrow(df_okta_daily_exports) == 0) {
+  # so current is the same as updated, step 3.6 needs this to work
+  df_okta_updated <- df_okta_current
+  
+  stop(' ... No Exports to process')
+}
 
 # find the earliest unprocessed updates
 update_date <- df_okta_daily_exports %>% filter(filedate == min(filedate)) %>% pull(filedate)
@@ -120,6 +125,17 @@ glue('NEW DF : {nrow(df_okta_current_update)}, CHECK {nrow(df_okta_current) + ch
 # -------------------------------------------------------------------------
 # 3.6 Extract useful datasets for analytics
 
+get_var = 'office'
+
+df_reporting_office <- df_okta_updated %>% 
+  filter(variable == get_var) %>% 
+  group_by(okta_id) %>% 
+  filter(date_extract == max(date_extract)) %>% 
+  ungroup() %>% 
+  select(okta_id, data) %>% 
+  rename(!!get_var := data)
+
+# dataset for reporting
 get_var = 'advisername'
 
 df_reporting_adviser <- df_okta_updated %>% 
@@ -128,7 +144,8 @@ df_reporting_adviser <- df_okta_updated %>%
   filter(date_extract == max(date_extract)) %>% 
   ungroup() %>% 
   select(okta_id, date_extract, data) %>% 
-  rename(!!get_var := data)
+  rename(!!get_var := data) %>% 
+  left_join(df_reporting_office, by='okta_id')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if (WRITE_DATA) {
