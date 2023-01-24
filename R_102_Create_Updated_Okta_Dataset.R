@@ -125,8 +125,16 @@ glue('NEW DF : {nrow(df_okta_current_update)}, CHECK {nrow(df_okta_current) + ch
 # -------------------------------------------------------------------------
 # 3.6 Extract useful datasets for analytics
 
-get_var = 'office'
+get_var = 'member_id'
+df_reporting_mbr <- df_okta_updated %>% 
+  filter(variable == get_var) %>% 
+  group_by(okta_id) %>% 
+  filter(date_extract == max(date_extract)) %>% 
+  ungroup() %>% 
+  select(okta_id, data) %>% 
+  rename(!!get_var := data)
 
+get_var = 'office'
 df_reporting_office <- df_okta_updated %>% 
   filter(variable == get_var) %>% 
   group_by(okta_id) %>% 
@@ -137,7 +145,6 @@ df_reporting_office <- df_okta_updated %>%
 
 # dataset for reporting
 get_var = 'advisername'
-
 df_reporting_adviser <- df_okta_updated %>% 
   filter(variable == get_var) %>% 
   group_by(okta_id) %>% 
@@ -145,6 +152,7 @@ df_reporting_adviser <- df_okta_updated %>%
   ungroup() %>% 
   select(okta_id, date_extract, data) %>% 
   rename(!!get_var := data) %>% 
+  left_join(df_reporting_mbr, by='okta_id') %>% 
   left_join(df_reporting_office, by='okta_id')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
