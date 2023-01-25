@@ -10,6 +10,7 @@ fn_read_okta_export <- function(file_export, file_date) {
     arrange(okta_id, office) %>% 
     group_by(okta_id) %>% 
     mutate(office = paste0(office, collapse='; ')) %>% 
+    mutate(member_id = paste0(member_id, collapse='; ')) %>% 
     filter(row_number() == 1) %>% 
     ungroup() %>% 
     # add a variable to record extract date

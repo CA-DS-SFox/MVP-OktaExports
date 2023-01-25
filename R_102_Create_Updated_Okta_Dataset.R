@@ -3,6 +3,8 @@ library(tidyverse)
 library(here)
 library(glue)
 
+# functions to read in okta data, collapse multiple fields for the small
+# handful (8 at the moment) advisers who work multiple offices
 source('R_Include_Functions.R')
 
 WRITE_DATA <- TRUE
