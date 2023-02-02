@@ -155,7 +155,11 @@ df_reporting_adviser <- df_okta_updated %>%
   select(okta_id, date_extract, data) %>% 
   rename(!!get_var := data) %>% 
   left_join(df_reporting_mbr, by='okta_id') %>% 
-  left_join(df_reporting_office, by='okta_id')
+  left_join(df_reporting_office, by='okta_id') %>% 
+  mutate(member_id_ca = case_when(is.na(member_id) ~ '',
+                                  str_sub(office, 1, 3) == 'MBR' ~ paste0(str_sub(member_id,1,2),'/',str_sub(member_id,3,6)),
+                                  T ~ '')) %>% 
+  identity()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if (WRITE_DATA) {
@@ -169,4 +173,9 @@ if (WRITE_DATA) {
   print(glue(' ... Writing {file_name}'))
   write_csv(df_reporting_adviser, file_name)
   
+  # save to g:
+  out_dir <- 'G:/Shared drives/CA - Interim Connect Report Log Files & Guidance/Interim Reports'
+  file_name <- glue(out_dir,'/reporting_oktaadvisers.csv')  
+  print(glue(' ... Writing {file_name}'))
+  write_csv(df_reporting_adviser, file_name)
 }
